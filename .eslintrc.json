@@ -1,0 +1,41 @@
+{
+	"env": {
+		"es6": true,
+		"node": true,
+		"mocha": true
+	},
+	"globals": {
+		"artifacts": "readonly",
+		"contract": "readonly",
+		"assert": "readonly",
+		"expect": "readonly"
+	},
+	"extends": [
+		"eslint:recommended"
+	],
+	"parserOptions": {
+		"ecmaVersion": 2017,
+		"sourceType": "module"
+	},
+	"rules": {
+    "indent": [
+      "warn",
+      "tab"
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "quotes": [
+      "warn",
+      "double"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "no-console": [
+      "off"
+    ]
+  }
+}
