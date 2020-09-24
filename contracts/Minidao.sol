@@ -46,8 +46,11 @@ pragma solidity ^0.6.3;
 import "./lib/Administre.sol";
 
 /// @title Minidao
-/// @dev Hérite des méthodes de la dépendance `Administre` (contrat dans le sous-répertoire `lib`), qui gère les droits d'accès et niveaux d'autorisations.
-/// @notice Ce contrat agit comme une "mini-DAO", capable de gérer une "cagnotte", qui sera distribuée (maximum une fois par semaine) aux bénéficiaires désignés, selon une répartition proportionnelle aux votes des participants.
+/// @dev Hérite des méthodes de la dépendance `Administre` (contrat dans le sous-répertoire `lib`),
+/// qui gère les droits d'accès et niveaux d'autorisations.
+/// @notice Ce contrat agit comme une "mini-DAO", capable de gérer une "cagnotte",
+/// qui sera distribuée (maximum une fois par semaine) aux bénéficiaires désignés,
+/// selon une répartition proportionnelle aux votes des participants.
 contract Minidao is Administre {
 
 	string constant private ERREUR_VOTANT_NON_AUTORISE = "VOTANT NON AUTORISÉ";
@@ -63,8 +66,14 @@ contract Minidao is Administre {
 	event NouveauMembreComite(address indexed id);
 	event NouveauVotant(address indexed id);
 	event NouveauBeneficiaire(address indexed id);
-	event NouveauScrutin(uint indexed num, uint distribue); // renvoie le nouveau numéro de scrutin, ainsi que le montant total distribué à l'issue du scrutin précédent.
-	event VoteFinActivite(address indexed id, uint8 restant); // renvoie l'adresse-id du Membre au Comité qui a voté la fin d'activité, ainsi que le nombre de votes restants nécessaires pour déclencher la cessation d'activité.
+	
+	// Renvoie le nouveau numéro de scrutin, ainsi que le montant total distribué à l'issue du scrutin précédent.
+	event NouveauScrutin(uint indexed num, uint distribue);
+	
+	/* Renvoie l'adresse-id du Membre au Comité qui a voté la fin d'activité, ainsi que le nombre de votes restants
+	 * nécessaires pour déclencher la cessation d'activité.
+	 */
+	event VoteFinActivite(address indexed id, uint8 restant);
 
 	mapping (address => mapping (address => bool)) approbVotant; // Approbation des Membres du Comité pour les votants
 	mapping (address => mapping (address => bool)) approbBenef; // Approbation des Membres au Comité pour les bénéficiaires
@@ -112,7 +121,8 @@ contract Minidao is Administre {
 		return votant[id] >= membresComite / 2;
 	}
 
-	/// @dev Méthode d'ajout d'un membre au Comité qui peut accepter de nouveaux votants. Seul l'administrateur du contrat peut le faire.
+	/// @dev Méthode d'ajout d'un membre au Comité qui peut accepter de nouveaux votants.
+	/// Seul l'administrateur du contrat peut le faire.
 	/// @param id L'adresse-identité du nouveau Membre au Comité.
 	function ajouteMembreComite(address id) public seulAdmin seulActif {
 		require(membresComite <= 10, "NB_MEMBRES_COMITE_MAX");
@@ -121,7 +131,8 @@ contract Minidao is Administre {
 		emit NouveauMembreComite(id);
 	}
 
-	/// @notice Approbation d'un votant. Seul un Membre au Comité peut le faire. Le votant ne sera approuvé qu'une fois une majorité de 50% atteinte.
+	/// @notice Approbation d'un votant. Seul un Membre au Comité peut le faire.
+	/// Le votant ne sera approuvé qu'une fois une majorité de 50% atteinte.
 	/// @param id L'adresse-identité du votant à approuver.
 	function approuveVotant(address id) public seulAutorise(AUTORISATION_COMITE) seulActif membreActif {
 		if (approbVotant[msg.sender][id] || votant[id] >= membresComite / 2) {
@@ -133,7 +144,8 @@ contract Minidao is Administre {
 		}
 	}
 
-	/// @notice Approbation d'un bénéficiaire. Seul un Membre au Comité peut le faire. Le bénéficiaire ne sera approuvé qu'une fois l'unanimité atteinte.
+	/// @notice Approbation d'un bénéficiaire. Seul un Membre au Comité peut le faire.
+	/// Le bénéficiaire ne sera approuvé qu'une fois l'unanimité atteinte.
 	/// @param id L'adresse-identité du bénéficiaire à approuver.
 	function approuveBeneficiaire(address id) public seulAutorise(AUTORISATION_COMITE) seulActif membreActif {
 		if (approbBenef[msg.sender][id] || benef[id] >= membresComite) {
@@ -153,8 +165,10 @@ contract Minidao is Administre {
 		++votes[beneficiaire][scrutin];
 	}
 
-	/// @notice Méthode de déclenchement de la distribution hebdomadaire des fonds. Seul un Membre au Comité peut le faire.
-	/// @param frais Montant (en Wei) demandé en remboursement de frais et émolument. Maximum 0.1 ETH ou 10% du montant de la cagnotte.
+	/// @notice Méthode de déclenchement de la distribution hebdomadaire des fonds.
+	/// Seul un Membre au Comité peut le faire.
+	/// @param frais Montant (en Wei) demandé en remboursement de frais et émolument.
+	/// Maximum 0.1 ETH ou 10% du montant de la cagnotte.
 	function distribution(uint frais) public seulAutorise(AUTORISATION_COMITE) seulActif membreActif {
 		require(block.timestamp >= distribPrecedente + 7 days, ERREUR_INTERVALLE_DISTRIBUTION);
 		uint rembourseMax = cagnotte / 100;
