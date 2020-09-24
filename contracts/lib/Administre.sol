@@ -37,7 +37,6 @@ pragma solidity ^0.6.3;
 contract Administre {
 
 	string constant internal ERR_NON_ADMIN = "ADMIN:NON_ADMINISTRATEUR";
-	string constant internal ERR_NON_PROPRIERAIRE = "ADMIN:NON_PROPRIETAIRE";
 	string constant internal ERR_NON_AUTORISE = "ADMIN:NON_AUTORISE";
 	string constant internal ERR_MAUVAISE_ADRESSE = "ADMIN:MAUVAISE_ADRESSE";
 
@@ -64,12 +63,6 @@ contract Administre {
 	/// @param niveau Le niveau d'autorisation requis
 	modifier seulAutorise(uint8 niveau) {
 		require(estAutorise(niveau), ERR_NON_AUTORISE);
-		_;
-	}
-
-	/// @dev Exception si l'apellant n'est pas propriétaire des données (Data.sol)
-	modifier seulProprietaire() {
-		require(msg.sender == admin, ERR_NON_PROPRIERAIRE);
 		_;
 	}
 
