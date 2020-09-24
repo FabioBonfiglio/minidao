@@ -1,16 +1,29 @@
 {
   "name": "minidao",
   "version": "0.1.0",
-  "description": "A simple escrow and reward DAO",
+  "description": "A simple escrow and distribute mini-DAO",
   "main": "index.js",
   "scripts": {
+		"build": "truffle compile",
+		"console": "truffle console",
+		"coverage": "truffle run coverage",
+		"deploy": "truffle migrate --network rinkeby",
+		"linter": "solhint \"contracts/**/*.sol\"",
     "test": "truffle test",
-    "testchain": "ganache-cli -p 9545 -s \"pleaseSeedMeAmnemonic\" -i 1337 --gasLimit 8600000 --accounts 10"
+		"testdeploy": "truffle migrate --network development",
+    "testchain": "ganache-cli -p 9545 -s \"testMnemonic\" -i 1337 --gasLimit 8600000 --accounts 30"
   },
-  "author": "Fabio Bonfiglio <fabio.bonfiglio@protonmail.ch>",
+  "author": "Fabio Bonfiglio <fabio.bonfiglio@protonmail.ch> (https://fabio_bonfiglio.keybase.pub/)",
   "license": "ISC",
+	"engines": {
+    "node": ">=12.18.3",
+    "npm": "^6.14.8"
+  },
+	"private": true,
   "devDependencies": {
+    "@truffle/hdwallet-provider": "^1.1.0",
     "eslint": "^7.9.0",
+    "readline-sync": "^1.4.10",
     "solhint": "^3.2.0",
     "solidity-coverage": "^0.7.10",
     "truffle": "^5.1.45",

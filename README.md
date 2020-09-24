@@ -38,23 +38,44 @@ puis installer les dépendances:
 ```sh
 $ npm install
 ```
-Une fois fait, on peut alors soit lancer une blockchain locale de tests, avec la commande suivante:
+Une fois fait, on peut alors soit lancer une blockchain locale de tests, **dans un second terminal**, avec la commande suivante:
 ```sh
 $ npm run testchain
 ```
-et lancer les tests de fonctionnement, ce qui va au préalable déployer une nouvelle instance du contrat sur cette chaîne:
+et lancer les tests de fonctionnement:
 ```sh
 $ npm test
+```
+Ou déployer une instance de tests avec la commande
+```sh
+$ npm run testdeploy
 ```
 Il est ensuite possible d'interagir avec le smart contract via une [abstraction de contrat Truffle](https://www.trufflesuite.com/docs/truffle/reference/contract-abstractions), en lançant la console ainsi:
 ```sh
 $ npm run console
+```
+Puis de se connecter à l'instance déployée ainsi:
+```js
+> const minidao = await Minidao.deployed();
+...
+// Il est ensuite possible d'accéder aux méthodes du contrat, comme par exemple 
+> await minidao.administrateur()
+// Ce qui devrait retourner l'adresse de l'administrateur du contrat.
 ```
 
 Ou alors, il est possible de déployer le contrat sur un réseau de test public _Rinkeby_, auquel cas il vous sera demandé d'entrer la clé privée à utiliser pour la transaction de déploiement (pour obtenir des ETH de test, passer par ce [faucet](https://faucet.rinkeby.io/)):
 ```sh
 $ npm run deploy
 ```
+> :warning: Prenez bien note de l'adresse de la nouvelle instance déployée du contrat. Elle sera affichée une fois le déploiement passé avec succès (2 confirmations attendues, soit ~30 secondes).  
+> Cette adresse vous sera utile pour vous connecter à cette même instance du contrat depuis une autre webapp ou une console lancée depuis une autre session / machine, etc.
+
+> :information_source: La procédure détaillée de connexion et interaction à un contrat existant dépasse le cadre de cette démonstration. N'hésitez pas à écrire à l'auteur pour toute question sur ce sujet.
+
 On peut ensuite interagir avec le contrat via la librairie JavaScript [`web3js`](https://web3js.readthedocs.io/en/v1.3.0/), que ce soit en ligne de commande via la console `node`, ou via une interface utilisateur développée en HTML5 (non fournie ici).  
 Pour une interaction depuis un script python, on peut utiliser la librairie [Web3.py](https://web3py.readthedocs.io/en/latest/).  
 En tous les cas, le descripteur [ABI](https://solidity.readthedocs.io/en/v0.6.12/abi-spec.html#index-0), nécessaire à la connexion avec l'instance déployée du contrat, se trouve dans le fichier `build/contracts/Minidao.json` qui aura été généré avant le déploiement.
+
+## Problèmes connus
+- L'opération de division dans l'EVM s'effectuant sur des types entiers et arrondissant vers zéro, il est possible que, lorsque le nombre de Membres au Comité est impair, un nouveau votant soit approuvé avant que la majorité de 50% soit atteinte. Par exemple, avec 5 Membres au Comité, un nouveau votant sera approuvé dès que 2 Membres au Comité auront voté en sa faveur.  
+Pour corriger ce problème il faudrait au préalable tester si le nombre de Membres au Comité est impair avec une opération modulo, puis effectuer le calcul de majorité à atteindre en conséquences. Ce paragraphe d'explication a probablement nécessité plus de temps pour être écrit que ce que n'aurait pris l'implémentation de la solution. Mais c'est pour la démonstration :) et un tout petit exemple des quelques spécificités de la programmation de smart contracts.
