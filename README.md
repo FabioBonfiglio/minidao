@@ -1,5 +1,5 @@
 # Minidao
-Une implémentation de démonstration d'un smart contract / "mini-dao" gérant la distribution de fonds à des bénéficiaires à intervalles réguliers.
+Une implémentation de démonstration d'un smart contract / _mini-DAO_ gérant la distribution de fonds à des bénéficiaires à intervalles réguliers.
 
 Cette démonstration fait partie du cours suivant: https://www.he-arc.ch/gestion/blockchain.
 
@@ -7,7 +7,16 @@ Cette démonstration fait partie du cours suivant: https://www.he-arc.ch/gestion
 > Ce contrat a été écrit à des fins éducatives uniquement. Il n'a pas été audité, et il est déconseillé de l'utiliser en l'état sur le réseau _Main Net_.
 
 > #### :information_source: "Utilisateur"
-> Ce contrat devant servir avant tout de démonstration d'implémentation d'une gouvernance arbitraire dans un _smart contract_, aucune interface utilisateur n'a été développée pour intéragir avec lui. La procédure d'installation ci-dessous est donc relativement complexe pour un néophyte, mais reste toutefois possible.
+> Ce contrat devant servir avant tout de démonstration d'implémentation d'une gouvernance arbitraire dans un _smart contract_, aucune interface utilisateur n'a été développée pour interagir avec lui. La procédure d'installation ci-dessous est donc relativement complexe pour un néophyte, mais reste toutefois possible.
+
+## Gouvernance
+Cette "_mini-DAO_" modélise la gouvernance suivante (l'implémentation du contrat a été réalisée d'après le cahier des charges suivant):
+- Un Comité (limité à 10 membres) approuve les votants qui pourront participer. Au moins 50% des Membres au Comité doivent approuver un votant pour que ce dernier puisse voter.
+- Toute personne est libre de faire une "donation" à la DAO. Les fonds sont détenus par le _smart contract_
+- Chaque semaine, les votants peuvent nominer un bénéficiaire de leur choix, parmi une liste définie par les Membres au Comité (à l'unanimité).
+- Les fonds sont ensuite distribués, maximum une fois par semaine, aux bénéficiaires proportionnellement aux nombre de votes qu'ils auront récoltés.
+- Après chaque distribution, les votes sont remis à zéro.
+- Le Comité peut décider, à l'unanimité uniquement, de terminer la DAO, en votant pour un bénéficiaire final du solde des fonds restants dans le contrat. Le contrat sera rendu inactif une fois cette opération terminée.
 
 ## Code source
 Si vous voulez uniquement consulter le code source du contrat, il s'agit du fichier [`contracts/Minidao.sol`](contracts/Minidao.sol).
