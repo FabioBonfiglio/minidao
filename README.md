@@ -24,7 +24,7 @@ Si vous voulez uniquement consulter le code source du contrat, il s'agit du fich
 ## Installation
 Pour pouvoir tester et déployer ce contrat sur un réseau de test _Rinkeby_, il vous faut au préalable disposer d'un environnement de travail [NodeJS](https://nodejs.org/en/download/).
 
-Les instructions ci-après sont pour une utilisation via un terminal de commandes _shell_. Les utilisateurs de MacOS ou Linux peuvent simplement ouvrir un terminal en appuyant sur `CTRL` + `C`. Les utilisateurs de Windows peuvent suivre [ce tutoriel](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/) pour installer un terminal compatible sur leur machine.
+Les instructions ci-après sont pour une utilisation via un terminal de commandes _shell_. Les utilisateurs de MacOS ou Linux peuvent simplement ouvrir un terminal en appuyant sur `CTRL` + `T`. Les utilisateurs de Windows peuvent suivre [ce tutoriel](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/) pour installer un terminal compatible sur leur machine.
 
 Une fois installé, _cloner_ le présent dépôt git avec la commande suivante:
 ```sh
