@@ -63,7 +63,6 @@ contract Minidao is Administre {
 	uint8 constant internal AUTORISATION_COMITE = 0xB0;
 
 	// "Events" de journalisation de certains changements.
-	event NouveauMembreComite(address indexed id);
 	event NouveauVotant(address indexed id);
 	event NouveauBeneficiaire(address indexed id);
 	
@@ -128,7 +127,6 @@ contract Minidao is Administre {
 		require(membresComite <= 10, "NB_MEMBRES_COMITE_MAX");
 		autorise(id, AUTORISATION_COMITE);
 		++membresComite;
-		emit NouveauMembreComite(id);
 	}
 
 	/// @notice Approbation d'un votant. Seul un Membre au Comité peut le faire.
