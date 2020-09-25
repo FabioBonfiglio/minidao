@@ -79,13 +79,20 @@ contract Minidao is Administre {
 	mapping (address => uint8) internal votant; // Autorisation des votants
 	mapping (address => uint8) internal benef; // Autorisation des bénéficiaires
 	mapping (address => bool) internal voteFin; // Marques de vote de fin d'activité des Membres au Comité
-	mapping (address => mapping (uint => uint32)) internal votes; // Décomptes de votes pour les bénéficiaires
+	mapping (address => mapping (uint => uint32)) internal votes; // Décomptes de votes pour les bénéficiaires, par scrutin
+	mapping (address => mapping (uint => bool)) internal aVote; // Marques de vote enregistré pour chaque votant, par scrutin
 	address[] public beneficiaires; // Liste de bénéficiaires approuvés.
 
 	uint8 public membresComite = 0; // Nombre de Membres au Comité
 	uint public cagnotte = 0; // Montant de la cagnotte
 	uint public scrutin = 1; // Numéro du scrutin en cours
-	uint public distribPrecedente; // Timestamp de la dernière distribution ayant été exécutée.
+
+	// Timestamp de la dernière distribution ayant été exécutée.
+	// Pour une mise en production, on pourrait plutôt initialiser au timestamp du
+	// block de déploiement, pour empêcher un déclenchement trop précoce de la
+	// distribution des fonds.
+	uint public distribPrecedente;
+
 	bool public actif = true;
 
 	/// @dev Au déploiement du contrat, le "déployeur" est automatiquement ajouté comme premier Membre au Comité.
@@ -160,6 +167,8 @@ contract Minidao is Administre {
 	/// @param beneficiaire L'adresse-identité du bénéficiaire auquel donner son vote.
 	function vote(address beneficiaire) public seulVotant seulActif {
 		require(benef[beneficiaire] >= membresComite, ERREUR_BENEFICIAIRE_INVALIDE);
+		require(!aVote[msg.sender][scrutin], "DEJA VOTÉ");
+		aVote[msg.sender][scrutin] = true;
 		++votes[beneficiaire][scrutin];
 	}
 
@@ -168,7 +177,7 @@ contract Minidao is Administre {
 	/// @param frais Montant (en Wei) demandé en remboursement de frais et émolument.
 	/// Maximum 0.1 ETH ou 10% du montant de la cagnotte.
 	function distribution(uint frais) public seulAutorise(AUTORISATION_COMITE) seulActif membreActif {
-		require(block.timestamp >= distribPrecedente + 7 days, ERREUR_INTERVALLE_DISTRIBUTION);
+		require(block.timestamp >= distribPrecedente + (7 days), ERREUR_INTERVALLE_DISTRIBUTION);
 		uint rembourseMax = cagnotte / 100;
 		rembourseMax = rembourseMax > 100 finney ? 100 finney : rembourseMax;
 		uint rembourse = frais > rembourseMax ? rembourseMax : frais;
@@ -193,7 +202,9 @@ contract Minidao is Administre {
 		msg.sender.transfer(montant);
 	}
 
-	/// @notice Méthode de vote des Membres au Comité pour cesser les activités. Nécessite l'unanimité.
+	/// @notice Méthode de vote des Membres au Comité pour cesser les activités.
+	/// Une fois tous les Membres au Comité "partis", le contrat se désactive et
+	/// les fonds restants transférés à l'administrateur actuel.
 	function termine() public seulAutorise(AUTORISATION_COMITE) seulActif membreActif {
 		voteFin[msg.sender] = true;
 		if (--membresComite == 0) {
