@@ -2,6 +2,15 @@
   "name": "minidao",
   "version": "0.1.0",
   "description": "A simple escrow and distribute mini-DAO",
+	"homepage": "https://gitlab.fbo.network/FabioB/minidao",
+	"contributors": [
+    "Fabio Bonfiglio <fabio.bonfiglio@protonmail.ch> (https://fabio_bonfiglio.keybase.pub/)"
+  ],
+	"license": "ISC",
+	"repository": {
+    "type": "git+ssh",
+    "url": "git@gitlab.fbo.network:FabioB/minidao.git"
+  },
   "main": "index.js",
   "scripts": {
 		"build": "truffle compile",
@@ -13,11 +22,12 @@
 		"testdeploy": "truffle migrate --network development",
     "testchain": "ganache-cli -p 9545 -s \"testMnemonic\" -i 1337 --gasLimit 8600000 --accounts 30"
   },
-  "author": "Fabio Bonfiglio <fabio.bonfiglio@protonmail.ch> (https://fabio_bonfiglio.keybase.pub/)",
-  "license": "ISC",
 	"engines": {
     "node": ">=12.18.3",
     "npm": "^6.14.8"
+  },
+	"bugs": {
+    "url": "https://gitlab.fbo.network/FabioB/minidao/-/issues"
   },
 	"private": true,
   "devDependencies": {
