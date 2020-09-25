@@ -26,11 +26,16 @@ Pour pouvoir tester et déployer ce contrat sur un réseau de test _Rinkeby_, il
 
 Les instructions ci-après sont pour une utilisation via un terminal de commandes _shell_. Les utilisateurs de MacOS ou Linux peuvent simplement ouvrir un terminal en appuyant sur `CTRL` + `T`. Les utilisateurs de Windows peuvent suivre [ce tutoriel](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/) pour installer un terminal compatible sur leur machine.
 
-Une fois installé, _cloner_ le présent dépôt git avec la commande suivante:
+Une fois installé, _cloner_ le présent dépôt git avec la commande suivante (si vous avez [configuré des clés SSH pour gitlab.fbo.network](https://gitlab.fbo.network/help#closed_lock_with_key-ssh-settings)):
 ```sh
-$ git clone https://github.com...
+$ git clone git@gitlab.fbo.network:FabioB/minidao.git
 ```
-et entrer dans le répertoire:
+ou depuis le mirroir github (mais vous ne pourrez pas [contribuer](CONTRIBUTING.md) au projet le cas échéant):
+```sh
+$ git clone https://github.com/FabioBonfiglio/minidao.git
+```
+
+Une fois cloné, entrer dans le répertoire:
 ```sh
 $ cd minidao
 ```
