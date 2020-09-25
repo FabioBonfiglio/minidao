@@ -1,5 +1,18 @@
 const HDWalletProvider = require("@truffle/hdwallet-provider");
+
 const rlSync = require("readline-sync");
+let privateKeys = [];
+
+const getPrivK = () => {
+	if (privateKeys.length === 0) {
+		privateKeys.push(rlSync.question("Enter (paste) deployer's account private key: ", {
+			hideEchoBack: true,
+			limit: /[0x]*[a-f,A-F,\d]{64}/,
+			limitMessage: "Not a valid private key."
+		}));
+	}
+	return privateKeys;
+};
 
 module.exports = {
 	networks: {
@@ -12,15 +25,9 @@ module.exports = {
 		},
 		rinkeby: {
 			provider: () => {
-				let privateKeys = [];
-				privateKeys.push(rlSync.question("Enter (paste) deployer's account private key: ", {
-					hideEchoBack: true,
-					limit: /[0x]*[a-f,A-F,\d]{64}/,
-					limitMessage: "Not a valid private key."
-				}));
 				return new HDWalletProvider({
-					privateKeys,
-					provider: "wss://rinkeby.infura.io/ws/v3/ba26e72900034669a71a4262af6cdd9c"
+					privateKeys: getPrivK(),
+					providerOrUrl: "wss://rinkeby.infura.io/ws/v3/ba26e72900034669a71a4262af6cdd9c"
 				});
 			},
 			network_id: 4,
