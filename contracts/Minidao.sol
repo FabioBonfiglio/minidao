@@ -74,12 +74,12 @@ contract Minidao is Administre {
 	 */
 	event VoteFinActivite(address indexed id, uint8 restant);
 
-	mapping (address => mapping (address => bool)) approbVotant; // Approbation des Membres du Comité pour les votants
-	mapping (address => mapping (address => bool)) approbBenef; // Approbation des Membres au Comité pour les bénéficiaires
-	mapping (address => uint8) votant; // Autorisation des votants
-	mapping (address => uint8) benef; // Autorisation des bénéficiaires
-	mapping (address => bool) voteFin; // Marques de vote de fin d'activité des Membres au Comité
-	mapping (address => mapping (uint => uint32)) votes; // Décomptes de votes pour les bénéficiaires
+	mapping (address => mapping (address => bool)) internal approbVotant; // Approbation des Membres du Comité pour les votants
+	mapping (address => mapping (address => bool)) internal approbBenef; // Approbation des Membres au Comité pour les bénéficiaires
+	mapping (address => uint8) internal votant; // Autorisation des votants
+	mapping (address => uint8) internal benef; // Autorisation des bénéficiaires
+	mapping (address => bool) internal voteFin; // Marques de vote de fin d'activité des Membres au Comité
+	mapping (address => mapping (uint => uint32)) internal votes; // Décomptes de votes pour les bénéficiaires
 	address[] public beneficiaires; // Liste de bénéficiaires approuvés.
 
 	uint8 public membresComite = 0; // Nombre de Membres au Comité
